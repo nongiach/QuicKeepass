@@ -47,7 +47,6 @@ def main(filename):
     choices = [ f"{e.title} {e.username} {e.url} {e.group}" for e in kp.entries ]
     returncode, choice = ask_choice(choices)
     entry = kp.entries[choices.index(choice)]
-    print(returncode, entry.password, window)
     if returncode == 10:
         autotype(window, username=entry.username, password=entry.password)
     else:
