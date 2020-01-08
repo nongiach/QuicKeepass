@@ -142,7 +142,7 @@ def main():
     check_dependencies()
     args = ArgumentParser.parse_sys_argv()
     try:
-        main(args)
+        quickeeepass(args)
     except Exception as e:
         notify(e)
 

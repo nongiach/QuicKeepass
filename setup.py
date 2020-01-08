@@ -8,6 +8,7 @@ if sys.version.startswith("2"):
 setup(name='QuicKeepass',
         version='0.1',
         author='@chaignc',
+        author_email='contact me on Twitter @chaignc',
         url='https://github.com/nongiach/QuicKeepass',
         packages=['quickeepass'],
         py_modules=['quickeepass'],
@@ -19,6 +20,10 @@ setup(name='QuicKeepass',
             },
         install_requires=[
             'pykeepass',
+            ],
+        classifiers=[
+            'License :: OSI Approved :: MIT License',
+            'Programming Language :: Python :: 3', 
             ],
         keywords = ['keepass', 'rofi', 'password', 'quick', 'manager', 'autotype', 'autofill']
         )
