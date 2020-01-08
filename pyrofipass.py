@@ -56,7 +56,8 @@ def main(filename):
     filename : str
         Keepass database input
     """
-    # save mouse position and focused window
+    # save mouse position and focused windows
+    # x, y, screen, window = [ v.split(':')[1] for v in sh("xdotool getmouselocation")[1].split() ]
     window = sh("xdotool getactivewindow")[1]
     # open keepass database
     kp = PyKeePass(filename, password=ask_password(f"{filename} Password")[1])
@@ -67,6 +68,7 @@ def main(filename):
     # retriver user choosed password
     entry = kp.entries[choices.index(choice)]
     # restore window
+    # sh(f"xdotool mousemove {x} {y}")
     sh(f"xdotool windowactivate {window}")
     autotype(entry.username, entry.password, returncode)
 
