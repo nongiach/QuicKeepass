@@ -15,7 +15,9 @@ def notify(message):
 
 # apt install rofi xdotool
 # sudo pip3 install pykeepass
-# i3 config: bindsym $mod+u exec "/home/cc/perso/keepass/keeprofi.py /home/cc/perso/keepass/kali.kdbx"
+import sys
+# i3 config: bindsym $mod+u exec "/home/cc/github/pyrofipass/pyrofipass.py /home/cc/perso/keepass/kali.kdbx"
+
 class Config:
     userpass_key = "Alt+Return"
 
@@ -48,14 +50,24 @@ def check_dependencies():
     pass
 
 def main(filename):
-    # save mouse position and focused windows
-    x, y, screen, window = [ v.split(':')[1] for v in sh("xdotool getmouselocation")[1].split() ]
+    """ open filename keepass database and autotype password
+    Parameters
+    ----------
+    filename : str
+        Keepass database input
+    """
+    # save mouse position and focused window
+    window = sh("xdotool getactivewindow")[1]
+    # open keepass database
     kp = PyKeePass(filename, password=ask_password(f"{filename} Password")[1])
+    # prepare rofi selection for user
     choices = [ f"{e.title} {e.url} {e.group}" for e in kp.entries ]
+    # ask user to choose a password
     returncode, choice = ask_choice(choices)
+    # retriver user choosed password
     entry = kp.entries[choices.index(choice)]
-    # restore mouse position
-    sh(f"xdotool mousemove {x} {y}")
+    # restore window
+    sh(f"xdotool windowactivate {window}")
     autotype(entry.username, entry.password, returncode)
 
 if __name__ == "__main__":
