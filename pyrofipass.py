@@ -2,16 +2,14 @@
 # Author: @chaignc
 
 from pykeepass import PyKeePass, exceptions as kp_exceptions
-from subprocess import Popen, PIPE
-from gi.repository import Notify
+from subprocess import Popen, PIPE, check_output
 import sys
 import time
 
-Notify.init("pyrofipass")
 def notify(message):
-    message = str(message)
+    """ show a message to the user"""
     print(message)
-    Notify.Notification.new(message).show()
+    check_output(f'rofi -e "{message}"', shell=True)
 
 # apt install rofi xdotool
 # sudo pip3 install pykeepass
@@ -19,9 +17,19 @@ import sys
 # i3 config: bindsym $mod+u exec "/home/cc/github/pyrofipass/pyrofipass.py /home/cc/perso/keepass/kali.kdbx"
 
 class Config:
-    userpass_key = "Alt+Return"
+    """ config
+    userpass_key: keybinding to type username and password
+    """
+    version = "0.1b"
+    key_user_pass = "Alt+Return"
+    key_pass_only = "Return"
+    # rofi_conf = f'-matching fuzzy' # not good
+    # -theme solarized 
+    rofi_conf = f'-sort -mesg pyrofipass_By_@chaignc_v{version}'
+    rofi_choice = f'{rofi_conf} -kb-accept-entry {key_pass_only} -kb-custom-1 {key_user_pass}'
 
 def sh(cmd, stdin="", sleep=False):
+    """ run a command, send stdin and capture stdout and exit status"""
     if sleep:
         time.sleep(0.5)
     process = Popen(cmd.split(), stdin=PIPE, stdout=PIPE)
@@ -34,15 +42,24 @@ def sh(cmd, stdin="", sleep=False):
     return returncode, stdout
 
 def ask_password(message):
+    """ ask password using rofi """
     return sh(f'rofi -password -p "{message}" -dmenu')
 
 def ask_choice(choices):
-    return sh(f'rofi -dmenu -p By_@chaignc -kb-custom-1 {Config.userpass_key}', stdin='\n'.join(choices))
+    """ multiple choice using rofi """
+    return sh(f'rofi -dmenu -p URL {Config.rofi_choice}', stdin='\n'.join(choices))
 
 def autotype(username, password, returncode):
-    if returncode == 10: # type password
+    """ autotype username and password
+    Parameters
+    ----------
+    returncode : str
+        user typed key to decide if we autotype password only or username&password
+    """
+    if returncode == 10: # type username
         sh(f"xdotool type --file /dev/stdin", stdin=username, sleep=True)
         sh(f"xdotool key Tab", sleep=True)
+    # type password
     sh(f"xdotool type --file /dev/stdin", stdin=password, sleep=True)
     sh(f"xdotool key Return", sleep=True)
 
@@ -56,8 +73,7 @@ def main(filename):
     filename : str
         Keepass database input
     """
-    # save mouse position and focused windows
-    # x, y, screen, window = [ v.split(':')[1] for v in sh("xdotool getmouselocation")[1].split() ]
+    # save active window
     window = sh("xdotool getactivewindow")[1]
     # open keepass database
     kp = PyKeePass(filename, password=ask_password(f"{filename} Password")[1])
@@ -67,8 +83,7 @@ def main(filename):
     returncode, choice = ask_choice(choices)
     # retriver user choosed password
     entry = kp.entries[choices.index(choice)]
-    # restore window
-    # sh(f"xdotool mousemove {x} {y}")
+    # restore active window
     sh(f"xdotool windowactivate {window}")
     autotype(entry.username, entry.password, returncode)
 
