@@ -3,8 +3,15 @@
 
 from pykeepass import PyKeePass, exceptions as kp_exceptions
 from subprocess import Popen, PIPE
+from gi.repository import Notify
 import sys
 import time
+
+Notify.init("pyrofipass")
+def notify(message):
+    message = str(message)
+    print(message)
+    Notify.Notification.new(message).show()
 
 # apt install rofi xdotool
 # sudo pip3 install pykeepass
@@ -30,30 +37,35 @@ def ask_password(message):
 def ask_choice(choices):
     return sh(f'rofi -dmenu -p By_@chaignc -kb-custom-1 {Config.userpass_key}', stdin='\n'.join(choices))
 
-def autotype(window, *, username=None, password=None):
-    if username:
-        sh(f"xdotool type --window {window} --file /dev/stdin", stdin=username, sleep=True)
-        sh(f"xdotool key --window {window} Tab", sleep=True)
-    sh(f"xdotool type --window {window} --file /dev/stdin", stdin=password, sleep=True)
-    sh(f"xdotool key --window {window} Return", sleep=True)
+def autotype(username, password, returncode):
+    if returncode == 10: # type password
+        sh(f"xdotool type --file /dev/stdin", stdin=username, sleep=True)
+        sh(f"xdotool key Tab", sleep=True)
+    sh(f"xdotool type --file /dev/stdin", stdin=password, sleep=True)
+    sh(f"xdotool key Return", sleep=True)
+
+def check_dependencies():
+    pass
 
 def main(filename):
-    _, window = sh("xdotool getactivewindow")
-    try:
-        kp = PyKeePass(filename, password=ask_password(f"{filename} Password")[1])
-    except kp_exceptions.CredentialsIntegrityError as e:
-        print(e)
-        return
-    choices = [ f"{e.title} {e.username} {e.url} {e.group}" for e in kp.entries ]
+    # save mouse position and focused windows
+    x, y, screen, window = [ v.split(':')[1] for v in sh("xdotool getmouselocation")[1].split() ]
+    kp = PyKeePass(filename, password=ask_password(f"{filename} Password")[1])
+    choices = [ f"{e.title} {e.url} {e.group}" for e in kp.entries ]
     returncode, choice = ask_choice(choices)
     entry = kp.entries[choices.index(choice)]
-    if returncode == 10:
-        autotype(window, username=entry.username, password=entry.password)
-    else:
-        autotype(window, password=entry.password)
+    # restore mouse position
+    sh(f"xdotool mousemove {x} {y}")
+    autotype(entry.username, entry.password, returncode)
 
 if __name__ == "__main__":
+    check_dependencies()
     if len(sys.argv) == 2:
-        main(sys.argv[1])
+        try:
+            main(sys.argv[1])
+        except kp_exceptions.CredentialsIntegrityError as e:
+            notify(e)
+        except Exception as e:
+            notify(e)
     else:
-        print(f"Usage: {sys.argv[0]} [Filename]\nAuthor: @chaignc")
+        notify(f"Usage: {sys.argv[0]} [Filename]\nAuthor: @chaignc")
