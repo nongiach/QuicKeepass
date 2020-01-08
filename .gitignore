@@ -1,4 +1,4 @@
-/* build/ */
+build/
 QuicKeepass.egg-info/
 dist/
 **/__pycache__/

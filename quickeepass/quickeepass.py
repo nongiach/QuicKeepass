@@ -19,20 +19,20 @@ def notify_error(message, do_print=True):
     notify(f"QuicKeepass ERROR: {message}\nAuthor: @chaignc", do_print=do_print)
 
 class Config:
-    """ config
-    userpass_key: keybinding to type username and password
+    """ config, Keybindings and advanced config
     """
-    version = "0.1b"
+    version = "0.3"
     key_user_pass = "Return"
     key_pass_only = "Alt+Return"
-    # rofi_conf = f'-matching fuzzy' # fuzzy matching is not that good here
-    # -theme solarized  # if you want to change theme
     rofi_conf = f'-sort -mesg QuicKeepass_By_@chaignc_v{version}'
     rofi_choice = f'{rofi_conf} -kb-accept-entry {key_pass_only} -kb-custom-1 {key_user_pass}'
     rofi_ask_password = f'{rofi_conf}'
+    # args sent by the user from cmdline
+    rofi_userargs = f''
 
 def sh(cmd, stdin="", sleep=False):
     """ run a command, send stdin and capture stdout and exit status"""
+    print(cmd)
     if sleep:
         time.sleep(0.5)
     # process = Popen(cmd.split(), stdin=PIPE, stdout=PIPE)
@@ -51,11 +51,11 @@ def rofi(cmd, stdin="", sleep=False):
     
 def ask_password(message):
     """ ask password using rofi """
-    return rofi(f'rofi -password -p "{message}" -dmenu {Config.rofi_ask_password}')
+    return rofi(f'rofi -password -p "{message}" -dmenu {Config.rofi_ask_password} {Config.rofi_userargs}')
 
 def ask_choice(choices):
     """ multiple choice using rofi """
-    return rofi(f'rofi -dmenu -p URL {Config.rofi_choice}', stdin='\n'.join(choices))
+    return rofi(f'rofi -dmenu -p URL {Config.rofi_choice} {Config.rofi_userargs}', stdin='\n'.join(choices))
 
 def autotype(username, password, returncode):
     """ autotype username and password
@@ -123,12 +123,14 @@ class ArgumentParser(argparse.ArgumentParser):
     def parse_sys_argv():
         parser = ArgumentParser(prog='QuicKeepass', description='QuicKeepass')
         parser.add_argument('database', type=argparse.FileType('r'), help='keepass database')
-        parser.add_argument('--password', dest='password', action='store_true')
-        parser.set_defaults(password=False)
+        parser.add_argument('--password', dest='password', default=False, action='store_true')
         parser.add_argument('--keyfile', type=argparse.FileType('r'), dest='keyfile')
+        parser.add_argument('--rofiargs', type=str, default="", help='aditional parameters for rofi')
+
         args = parser.parse_args()
 
         args.database = args.database.name
+        Config.rofi_userargs = args.rofiargs
 
         if args.keyfile is None:
             args.password = True
