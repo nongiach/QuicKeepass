@@ -94,7 +94,7 @@ def opendatabase(filename, password, keyfile):
     kp = PyKeePass(filename, **keepassargs)
     return kp
 
-def main(args):
+def quickeeepass(args):
     """ open filename keepass database and autotype password
     Parameters
     ----------
@@ -138,10 +138,13 @@ class ArgumentParser(argparse.ArgumentParser):
             args.keyfile = args.keyfile.name
         return args
 
-if __name__ == "__main__":
+def main():
     check_dependencies()
     args = ArgumentParser.parse_sys_argv()
     try:
         main(args)
     except Exception as e:
         notify(e)
+
+if __name__ == "__main__":
+    main()
