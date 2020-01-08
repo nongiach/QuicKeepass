@@ -27,8 +27,8 @@ class Config:
     userpass_key: keybinding to type username and password
     """
     version = "0.1b"
-    key_user_pass = "Alt+Return"
-    key_pass_only = "Return"
+    key_user_pass = "Return"
+    key_pass_only = "Alt+Return"
     # rofi_conf = f'-matching fuzzy' # not good
     # -theme solarized 
     rofi_conf = f'-sort -mesg pyrofipass_By_@chaignc_v{version}'
@@ -73,11 +73,14 @@ def autotype(username, password, returncode):
     sh(f"xdotool type --file /dev/stdin", stdin=password, sleep=True)
     sh(f"xdotool key Return", sleep=True)
 
-def check_dependencies():
-    returncode, _ = sh("which roi")
+def do_check_dependencies(tool, install_instruction):
+    returncode, _ = sh(f"which {tool}")
     if returncode:
-        notify_error("Rofi not found please => apt install rofi")
+        notify_error(f"{tool} not found please => {install_instruction}")
         sys.exit(1)
+
+def check_dependencies():
+    do_check_dependencies("rofi", "apt install rofi")
 
 def opendatabase(filename, password, keyfile):
     print(f"filename {filename}")
@@ -102,15 +105,15 @@ def main(args):
     window = sh("xdotool getactivewindow")[1]
     # open keepass database
     kp = opendatabase(args.database, args.password, args.keyfile)
-    # # prepare rofi selection for user
-    # choices = [ f"{e.title} {e.url} {e.group}" for e in kp.entries ]
-    # # ask user to choose a password
-    # returncode, choice = ask_choice(choices)
-    # # retriver user choosed password
-    # entry = kp.entries[choices.index(choice)]
-    # # restore active window
-    # sh(f"xdotool windowactivate {window}")
-    # autotype(entry.username, entry.password, returncode)
+    # prepare rofi selection for user
+    choices = [ f"{e.title} {e.url} {e.group}" for e in kp.entries ]
+    # ask user to choose a password
+    returncode, choice = ask_choice(choices)
+    # retriver user choosed password
+    entry = kp.entries[choices.index(choice)]
+    # restore active window
+    sh(f"xdotool windowactivate {window}")
+    autotype(entry.username, entry.password, returncode)
 
 class ArgumentParser(argparse.ArgumentParser):    
 
