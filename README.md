@@ -42,17 +42,21 @@ bindsym $mod+u exec "quickeepass REPLACE_WITH_YOUR_KEEPASS.kdbx --keyfile your.k
 ```
 
 ### Rofi theme
+Add the bellow arguments to change the theme.
 
-Add the bellow arguments to change the theme
+```quickeepass --rofiargs '-theme purple' test/password_only.kdbx```
 
-```--rofi_args '-theme solarized'```
+List of available theme like solarized [here](https://github.com/davatorium/rofi-themes/tree/master/Official%20Themes)
+
+### Rofi activate fuzzy matching
+Please man rofi to go deeper.
+
+```quickeepass --rofiargs '-matching fuzzy' test/password_only.kdbx```
 
 ### For other Window manager
 
 This should work perfectly, just see the above commands and adapt the start command, pull requests are welcom.
 
-    # rofi_conf = f'-matching fuzzy' # fuzzy matching is not that good here
-    # -theme solarized  # if you want to change theme
 
 ## Warning
 QuicKeepass is not a replacement to Keepass it only wraps Keepass to allow you to efficiently paste your passwords on Linux.
