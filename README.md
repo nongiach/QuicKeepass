@@ -32,5 +32,16 @@ bindsym $mod+u exec "quickeepass REPLACE_WITH_YOUR_KEEPASS.kdbx --keyfile your.k
 bindsym $mod+u exec "quickeepass REPLACE_WITH_YOUR_KEEPASS.kdbx --keyfile your.key --password"
 ```
 
+### For other Window manager
+
+This should work perfectly, just see the above commands and adapt the start command, pull requests are welcom.
+
 ## Warning
 QuicKeepass is not a replacement to Keepass it only wraps Keepass to allow you to efficiently paste your passwords on Linux.
+
+----
+By [@chaignc][] [#HexpressoTeam][hexpresso].
+
+
+[hexpresso]:     https://hexpresso.github.io
+[@chaignc]:    https://twitter.com/chaignc

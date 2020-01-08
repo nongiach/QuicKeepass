@@ -15,12 +15,8 @@ def notify(message, do_print=True):
     check_output(f'rofi -e "{message}"', shell=True)
 
 def notify_error(message, do_print=True):
+    """ show a ERROR message to the user"""
     notify(f"QuicKeepass ERROR: {message}\nAuthor: @chaignc", do_print=do_print)
-
-# apt install rofi xdotool
-# sudo pip3 install pykeepass
-import sys
-# i3 config: bindsym $mod+u exec "/home/cc/github/pyrofipass/pyrofipass.py /home/cc/perso/keepass/kali.kdbx"
 
 class Config:
     """ config
@@ -29,16 +25,18 @@ class Config:
     version = "0.1b"
     key_user_pass = "Return"
     key_pass_only = "Alt+Return"
-    # rofi_conf = f'-matching fuzzy' # not good
-    # -theme solarized 
-    rofi_conf = f'-sort -mesg pyrofipass_By_@chaignc_v{version}'
+    # rofi_conf = f'-matching fuzzy' # fuzzy matching is not that good here
+    # -theme solarized  # if you want to change theme
+    rofi_conf = f'-sort -mesg QuicKeepass_By_@chaignc_v{version}'
     rofi_choice = f'{rofi_conf} -kb-accept-entry {key_pass_only} -kb-custom-1 {key_user_pass}'
+    rofi_ask_password = f'{rofi_conf}'
 
 def sh(cmd, stdin="", sleep=False):
     """ run a command, send stdin and capture stdout and exit status"""
     if sleep:
         time.sleep(0.5)
-    process = Popen(cmd.split(), stdin=PIPE, stdout=PIPE)
+    # process = Popen(cmd.split(), stdin=PIPE, stdout=PIPE)
+    process = Popen(cmd, shell=True, stdin=PIPE, stdout=PIPE)
     process.stdin.write(bytes(stdin, "utf-8"))
     stdout = process.communicate()[0].decode('utf-8').strip()
     process.stdin.close()
@@ -53,7 +51,7 @@ def rofi(cmd, stdin="", sleep=False):
     
 def ask_password(message):
     """ ask password using rofi """
-    return rofi(f'rofi -password -p "{message}" -dmenu')
+    return rofi(f'rofi -password -p "{message}" -dmenu {Config.rofi_ask_password}')
 
 def ask_choice(choices):
     """ multiple choice using rofi """
@@ -88,7 +86,7 @@ def opendatabase(filename, password, keyfile):
     print(f"password {password}")
     keepassargs = dict()
     if password:
-        keepassargs["password"] = ask_password(f"{os.path.basename(filename)} Password")[1]
+        keepassargs["password"] = ask_password(f"Enter {os.path.basename(filename)} Password")[1]
     if keyfile:
         keepassargs["keyfile"] = keyfile
     kp = PyKeePass(filename, **keepassargs)
@@ -144,7 +142,7 @@ def main():
     try:
         quickeeepass(args)
     except Exception as e:
-        notify(e)
+        notify_error(e)
 
 if __name__ == "__main__":
     main()
