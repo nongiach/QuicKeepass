@@ -3,6 +3,8 @@
 
 from pykeepass import PyKeePass, exceptions as kp_exceptions
 from subprocess import Popen, PIPE, check_output
+from pathlib import Path
+import pickle
 import argparse
 import sys
 import time
@@ -21,7 +23,7 @@ def notify_error(message, do_print=True):
 class Config:
     """ config, Keybindings and advanced config
     """
-    version = "0.4"
+    version = "0.6"
     key_user_pass = "Return"
     key_pass_only = "Alt+Return"
     rofi_conf = f'-sort -mesg QuicKeepass_By_@chaignc_v{version}'
@@ -52,9 +54,9 @@ def ask_password(message):
     """ ask password using rofi """
     return rofi(f'rofi -password -p "{message}" -dmenu {Config.rofi_ask_password} {Config.rofi_userargs}')
 
-def ask_choice(choices):
+def ask_choice(choices, default_filter):
     """ multiple choice using rofi """
-    return rofi(f'rofi -dmenu -p URL {Config.rofi_choice} {Config.rofi_userargs}', stdin='\n'.join(choices))
+    return rofi(f'rofi -dmenu -p URL {Config.rofi_choice} {Config.rofi_userargs} -filter {default_filter}', stdin='\n'.join(choices))
 
 def autotype(username, password, returncode):
     """ autotype username and password
@@ -89,6 +91,39 @@ def opendatabase(database, password, keyfile):
     kp = PyKeePass(database, **keepassargs)
     return kp
 
+class Cache:
+    """ help to type password faster with cache
+    doesn't cache password only cache keepass password uuid
+    """
+    def __init__(self):
+        self.cache_path = Path(f"{Path.home()}/.config/quickeepass/cache")
+        self.dict = {}
+        self.load()
+
+    def load(self):
+        if self.cache_path.is_file() and os.path.getsize(self.cache_path) > 0:
+            with open(self.cache_path, "rb") as F:
+                self.dict = pickle.load(F)
+
+    def save(self):
+        os.makedirs(os.path.dirname(self.cache_path), exist_ok=True)
+        with open(self.cache_path, "wb") as F:
+            pickle.dump(self.dict, F)
+
+    def get(self, key, default):
+        return self.dict.get(key, default)
+    
+    def set(self, key, value):
+        self.dict[key] = value
+
+    def remember(self, windowname, uuid_choice):
+        if windowname in self.dict and self.dict[windowname] != uuid_choice:
+            # We got wrong once, never predict again for this window
+            self.set(windowname, "")
+        else:
+            self.set(windowname, uuid_choice)
+        self.save()
+
 def quickeeepass(args):
     """ open filename keepass database and autotype password
     Parameters
@@ -97,15 +132,27 @@ def quickeeepass(args):
         Keepass database input
     """
     # save active window
-    window = sh("xdotool getactivewindow")[1]
+    _, window = sh("xdotool getactivewindow")
+    _, windowname = sh("xdotool getactivewindow getwindowname")
     # open keepass database
     kp = opendatabase(args.database, args.password, args.keyfile)
     # prepare rofi selection for user
-    choices = [ f"{e.title} {e.url} {e.group}" for e in kp.entries ]
+    choices = [ f"{e.title} {e.url} {e.group}\t\t{e.uuid}" for e in kp.entries ]
+    # cache used to remember uuid history choice
+    cache = Cache()
     # ask user to choose a password
-    returncode, choice = ask_choice(choices)
+    print(f'predicted {cache.get(windowname, "")} for {windowname}')
+    predicted = cache.get(windowname, '')
+    if predicted:
+        entry = kp.find_entries(uuid=predicted, first=True)
+        predicted = entry.title
+    returncode, choice = ask_choice(choices, default_filter=predicted)
     # retriver user choosed password
     entry = kp.entries[choices.index(choice)]
+    # remember uuid choice for next time
+    cache.remember(windowname, entry.uuid)
+
+    print(f'choice {entry.title} {entry.uuid}')
     # restore active window
     sh(f"xdotool windowactivate {window}")
     autotype(entry.username, entry.password, returncode)
@@ -142,6 +189,7 @@ def main():
         quickeeepass(args)
     except Exception as e:
         notify_error(e)
+        raise e
 
 if __name__ == "__main__":
     main()
