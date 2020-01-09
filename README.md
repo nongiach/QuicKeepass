@@ -21,28 +21,22 @@ QuicKeepass is a tool that allows you to quickly paste password from your Keepas
 $ sudo pip3 install quickeepass
 ```
 
+## How to use
+```bash
+$ quickeepass REPLACE_WITH_YOUR_KEEPASS.kdbx
+$ # or
+$ quickeepass REPLACE_WITH_YOUR_KEEPASS.kdbx --keyfile your.key
+$ # or
+$ quickeepass REPLACE_WITH_YOUR_KEEPASS.kdbx --keyfile your.key --password
+```
+
 ## How to configure
 
 Add one of the bellow lines to your ~/.config/i3/config
 
-### i3 Basic configuration: Master Password
+### i3 Basic configuration
 ```
 bindsym $mod+u exec "quickeepass REPLACE_WITH_YOUR_KEEPASS.kdbx"
-```
-
-### i3 Advanced configuration 1: Keyfile
-
-If you use a keyfile you want need to type the master password everytime.
-Please read about keepass keyfile option.
-
-```
-bindsym $mod+u exec "quickeepass REPLACE_WITH_YOUR_KEEPASS.kdbx --keyfile your.key"
-```
-
-### i3 Advanced configuration 2: Keyfile and Password
-
-```
-bindsym $mod+u exec "quickeepass REPLACE_WITH_YOUR_KEEPASS.kdbx --keyfile your.key --password"
 ```
 
 ### Rofi theme
