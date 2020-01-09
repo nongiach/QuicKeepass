@@ -73,22 +73,20 @@ def autotype(username, password, returncode):
 def do_check_dependencies(tool, install_instruction):
     returncode, _ = sh(f"which {tool}")
     if returncode:
-        notify_error(f"{tool} not found please => {install_instruction}")
+        print(f"{tool} not found please => {install_instruction}")
         sys.exit(1)
 
 def check_dependencies():
     do_check_dependencies("rofi", "apt install rofi")
+    do_check_dependencies("xdotool", "apt install xdotool")
 
-def opendatabase(filename, password, keyfile):
-    print(f"filename {filename}")
-    print(f"keyfile {keyfile}")
-    print(f"password {password}")
+def opendatabase(database, password, keyfile):
     keepassargs = dict()
     if password:
         keepassargs["password"] = ask_password(f"Enter {os.path.basename(filename)} Password")[1]
     if keyfile:
         keepassargs["keyfile"] = keyfile
-    kp = PyKeePass(filename, **keepassargs)
+    kp = PyKeePass(database, **keepassargs)
     return kp
 
 def quickeeepass(args):
