@@ -1,8 +1,9 @@
 # QuicKeepass
 QuicKeepass is a tool that allows you to quickly paste password from your Keepass database using keyboard shorcuts.
 
-* [Youtube QuicKeepass Demo](https://www.youtube.com/watch?v=1gRADHlXerM)
-* [Youtube How to install and configure](https://www.youtube.com/watch?v=R2L0lEDUhGE)
+| Video DEMO: How to use QuicKeepass | Video Install and Configure QuicKeepass |
+|----------|:-------------:|
+| [![ DEMO: How to use QuicKeepass](https://img.youtube.com/vi/1gRADHlXerM/0.jpg)](https://www.youtube.com/watch?v=1gRADHlXerM) | [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/R2L0lEDUhGE/0.jpg)](https://www.youtube.com/watch?v=R2L0lEDUhGE) |
 
 # How to use
 * Type <Alt+u> to start QuicKeepass
