@@ -1,6 +1,9 @@
 # QuicKeepass
 QuicKeepass is a tool that allows you to quickly paste password from your Keepass database using keyboard shorcuts.
 
+* [Youtube QuicKeepass Demo](https://www.youtube.com/watch?v=1gRADHlXerM)
+* [Youtube How to install and configure](https://www.youtube.com/watch?v=R2L0lEDUhGE)
+
 # How to use
 * Type <Alt+u> to start QuicKeepass
 * Enter your keepass Master Passwod
@@ -60,6 +63,10 @@ This should work perfectly, just see the above commands and adapt the start comm
 
 ## Warning
 QuicKeepass is not a replacement to Keepass it only wraps Keepass to allow you to efficiently paste your passwords on Linux.
+
+## New features?
+* Tell me what you need :)
+* Maybe we will remember the required password using the windows title..
 
 ----
 By [@chaignc][] [#HexpressoTeam][hexpresso].

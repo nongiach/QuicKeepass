@@ -6,7 +6,7 @@ if sys.version.startswith("2"):
     sys.exit(1)
 
 setup(name='QuicKeepass',
-        version='0.3',
+        version='0.4',
         author='@chaignc',
         url='https://github.com/nongiach/QuicKeepass',
         packages=['quickeepass'],

@@ -21,7 +21,7 @@ def notify_error(message, do_print=True):
 class Config:
     """ config, Keybindings and advanced config
     """
-    version = "0.3"
+    version = "0.4"
     key_user_pass = "Return"
     key_pass_only = "Alt+Return"
     rofi_conf = f'-sort -mesg QuicKeepass_By_@chaignc_v{version}'
@@ -32,7 +32,6 @@ class Config:
 
 def sh(cmd, stdin="", sleep=False):
     """ run a command, send stdin and capture stdout and exit status"""
-    print(cmd)
     if sleep:
         time.sleep(0.5)
     # process = Popen(cmd.split(), stdin=PIPE, stdout=PIPE)
