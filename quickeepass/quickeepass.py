@@ -85,7 +85,7 @@ def check_dependencies():
 def opendatabase(database, password, keyfile):
     keepassargs = dict()
     if password:
-        keepassargs["password"] = ask_password(f"Enter {os.path.basename(filename)} Password")[1]
+        keepassargs["password"] = ask_password(f"Enter {os.path.basename(database)} Password")[1]
     if keyfile:
         keepassargs["keyfile"] = keyfile
     kp = PyKeePass(database, **keepassargs)
