@@ -18,7 +18,7 @@ QuicKeepass is a tool that allows you to quickly paste password from your Keepas
 
 ## How to install
 ```sh
-$ sudo pip3 install quickeepass
+$ sudo pip3 install --upgrade quickeepass
 ```
 
 ## How to use

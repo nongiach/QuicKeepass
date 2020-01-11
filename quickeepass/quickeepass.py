@@ -27,7 +27,7 @@ class Config:
     key_user_pass = "Return"
     key_pass_only = "Alt+Return"
     rofi_conf = f'-sort -mesg QuicKeepass_By_@chaignc_v{version}'
-    rofi_choice = f'{rofi_conf} -kb-accept-entry {key_pass_only} -kb-custom-1 {key_user_pass}'
+    rofi_choice = f'{rofi_conf} -i -kb-accept-entry {key_pass_only} -kb-custom-1 {key_user_pass}'
     rofi_ask_password = f'{rofi_conf}'
     # args sent by the user from cmdline
     rofi_userargs = f''
