@@ -23,7 +23,7 @@ def notify_error(message, do_print=True):
 class Config:
     """ config, Keybindings and advanced config
     """
-    version = "0.6"
+    version = "0.7"
     key_user_pass = "Return"
     key_pass_only = "Alt+Return"
     rofi_conf = f'-sort -mesg QuicKeepass_By_@chaignc_v{version}'

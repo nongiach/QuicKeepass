@@ -61,7 +61,8 @@ QuicKeepass is not a replacement to Keepass it only wraps Keepass to allow you t
 
 ## New features?
 * Tell me what you need :)
-* Maybe we will remember the required password using the windows title..
+* Maybe we will remember the required password using the windows title.. <= already implemented, just need to push the bash tricks
+* if Term in title "Return" instead of "Tab" between user and password
 
 ----
 By [@chaignc][] [#HexpressoTeam][hexpresso].
