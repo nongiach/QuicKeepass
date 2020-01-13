@@ -5,6 +5,12 @@ QuicKeepass is a tool that allows you to quickly paste password from your Keepas
 |----------|:-------------:|
 | [![ DEMO: How to use QuicKeepass](https://img.youtube.com/vi/1gRADHlXerM/0.jpg)](https://www.youtube.com/watch?v=1gRADHlXerM) | [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/R2L0lEDUhGE/0.jpg)](https://www.youtube.com/watch?v=R2L0lEDUhGE) |
 
+Why? Why? Why? Why security should be a trade of with usability?
+I actually think that we can design softwares that are secure and ergonomic.
+QuicKeepass for instance allows you to quickly paste any of your passwords from keepass with only two keyboard hits,
+QuicKeepass doesn't add attack surface to your keepass, it simply automates your keepass usage using pykeepass python wrapper.
+No secrets are stored outside of your keepass, your passwords are safe and your master password too.
+
 # How to use
 * Type <Alt+u> to start QuicKeepass
 * Enter your keepass Master Passwod
