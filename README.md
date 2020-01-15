@@ -71,8 +71,8 @@ QuicKeepass is not a replacement to Keepass it only wraps Keepass to allow you t
 * if Term in title "Return" instead of "Tab" between user and password
 
 ----
-By [@chaignc][] [#HexpressoTeam][hexpresso].
+By [@chaignc][] from [ChaigncHackademy][chk] and [#HexpressoTeam][hexpresso].
 
-
+[chk]:  http://github.com/nongiach/ChaigncHackademy
 [hexpresso]:     https://hexpresso.github.io
 [@chaignc]:    https://twitter.com/chaignc
