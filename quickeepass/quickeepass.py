@@ -23,7 +23,7 @@ def notify_error(message, do_print=True):
 class Config:
     """ config, Keybindings and advanced config
     """
-    version = "0.8"
+    version = "0.9"
     key_user_pass = "Return"
     key_pass_only = "Alt+Return"
     rofi_conf = f'-sort -mesg QuicKeepass_By_@chaignc_v{version}'
@@ -117,11 +117,12 @@ class Cache:
         self.dict[key] = value
 
     def remember(self, windowname, uuid_choice):
-        if windowname in self.dict and self.dict[windowname] != uuid_choice:
-            # We got wrong once, never predict again for this window
-            self.set(windowname, "")
-        else:
-            self.set(windowname, uuid_choice)
+        # if windowname in self.dict and self.dict[windowname] != uuid_choice:
+        #     # We got wrong once, never predict again for this window
+        #     self.set(windowname, "")
+        # else:
+        # Always remember the last choice
+        self.set(windowname, uuid_choice)
         self.save()
 
 def quickeeepass(args):
