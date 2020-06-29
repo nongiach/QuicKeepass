@@ -23,7 +23,7 @@ def notify_error(message, do_print=True):
 class Config:
     """ config, Keybindings and advanced config
     """
-    version = "0.9"
+    version = "1.0"
     key_user_pass = "Return"
     key_pass_only = "Alt+Return"
     rofi_conf = f'-sort -mesg QuicKeepass_By_@chaignc_v{version}'
@@ -142,18 +142,20 @@ def quickeeepass(args):
     # cache used to remember uuid history choice
     cache = Cache()
     # ask user to choose a password
-    print(f'predicted {cache.get(windowname, "")} for {windowname}')
+    # print(f'predicted {cache.get(windowname, "")} for {windowname}')
     predicted = cache.get(windowname, '')
     if predicted:
         entry = kp.find_entries(uuid=predicted, first=True)
-        predicted = entry.title
+        if entry is None:
+            predicted = ''
+        else:
+            predicted = entry.title
     returncode, choice = ask_choice(choices, default_filter=predicted)
     # retriver user choosed password
     entry = kp.entries[choices.index(choice)]
     # remember uuid choice for next time
     cache.remember(windowname, entry.uuid)
 
-    print(f'choice {entry.title} {entry.uuid}')
     # restore active window
     sh(f"xdotool windowactivate {window}")
     autotype(entry.username, entry.password, returncode)

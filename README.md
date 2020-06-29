@@ -68,6 +68,8 @@ QuicKeepass is not a replacement to Keepass it only wraps Keepass to allow you t
 ## New features?
 * Tell me what you need :)
 * if Term in title "Return" instead of "Tab" between user and password
+* Alt+l => type login only
+* wait that Alt goes up again before sending keys
 
 ----
 By [@chaignc][] from [ChaigncHackademy][chk] and [#HexpressoTeam][hexpresso].
