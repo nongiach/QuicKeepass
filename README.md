@@ -28,7 +28,7 @@ No secrets are stored outside of your keepass, your passwords are safe and your 
 $ sudo pip3 install --upgrade quickeepass
 ```
 
-## How to use
+## How to start
 ```bash
 $ quickeepass REPLACE_WITH_YOUR_KEEPASS.kdbx
 $ # or
