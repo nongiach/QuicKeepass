@@ -15,6 +15,7 @@ No secrets are stored outside of your keepass, your passwords are safe and your 
 * Type <Alt+u> to start QuicKeepass
 * Enter your keepass Master Passwod
 * Type <Enter> to Autofill username and password
+* **OR** Type <Alt+Enter> to Autofill password only
 
 ## Keyboard shortcuts
 
@@ -27,7 +28,7 @@ No secrets are stored outside of your keepass, your passwords are safe and your 
 $ sudo pip3 install --upgrade quickeepass
 ```
 
-## How to use
+## How to start
 ```bash
 $ quickeepass REPLACE_WITH_YOUR_KEEPASS.kdbx
 $ # or
@@ -62,8 +63,11 @@ Please man rofi to go deeper.
 This should work perfectly, just see the above commands and adapt the start command, pull requests are welcom.
 
 
-## Warning
+## Warning / Usecase
 QuicKeepass is not a replacement to Keepass it only wraps Keepass to allow you to efficiently paste your passwords on Linux.
+
+## How it works?
+It's barely 200 lines of code heavily commented, have a look! :)
 
 ## New features?
 * Tell me what you need :)
