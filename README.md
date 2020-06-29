@@ -63,8 +63,11 @@ Please man rofi to go deeper.
 This should work perfectly, just see the above commands and adapt the start command, pull requests are welcom.
 
 
-## Warning
+## Warning / Usecase
 QuicKeepass is not a replacement to Keepass it only wraps Keepass to allow you to efficiently paste your passwords on Linux.
+
+## How it works?
+It's barely 200 lines of code heavily commented, have a look! :)
 
 ## New features?
 * Tell me what you need :)
