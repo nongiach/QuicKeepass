@@ -15,6 +15,7 @@ No secrets are stored outside of your keepass, your passwords are safe and your 
 * Type <Alt+u> to start QuicKeepass
 * Enter your keepass Master Passwod
 * Type <Enter> to Autofill username and password
+* **OR** Type <Alt+Enter> to Autofill password only
 
 ## Keyboard shortcuts
 
